@@ -1,4 +1,8 @@
 
+def call(args){
+	echo "TEST: ${args}"
+}
+
 def pushDockerImage(){ 
 		withDockerRegistry(url:'https://registry.madisonmk.com',credentialsId:"local-docker-registry"){
 				script{
