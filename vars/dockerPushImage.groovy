@@ -1,10 +1,7 @@
 
-def call(args){
-	echo "TEST: ${args}"
-}
 
-def pushDockerImage(){ 
-		withDockerRegistry(url:'https://registry.madisonmk.com',credentialsId:"local-docker-registry"){
+def call(registry){ 
+		withDockerRegistry(url:${registry},credentialsId:"local-docker-registry"){
 				script{
 						imgTag = codeCo.GIT_COMMIT
 						imgLocalTag = "registry.madisonmk.com/${DEPARTMENT}/${APP_NAME}:${imgTag}"
