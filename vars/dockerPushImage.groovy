@@ -1,7 +1,7 @@
 
 
-def call(Closure body){ 
-
+def call(body){ 
+    
     def config = [:]
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
@@ -10,6 +10,7 @@ def call(Closure body){
 
     echo config.dockerImage
     echo config.dockerRegistry
+
 }
 
 
