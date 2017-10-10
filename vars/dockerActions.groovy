@@ -1,6 +1,5 @@
 
-def pushDockerImage(args){ 
-		echo ${args}	
+def pushDockerImage(){ 
 		withDockerRegistry(url:'https://registry.madisonmk.com',credentialsId:"local-docker-registry"){
 				script{
 						imgTag = codeCo.GIT_COMMIT
