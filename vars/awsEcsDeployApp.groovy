@@ -10,7 +10,8 @@ def call(Map DeployConfig){
                                 echo ENV: ${awsEnv}
                                 echo APP: ${awsAppName}
                                 echo IMG: ${awsEcrImg}
-                                aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))'
+                                clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))')
+                                echo \${clArn}
                             """
                 }
         }
