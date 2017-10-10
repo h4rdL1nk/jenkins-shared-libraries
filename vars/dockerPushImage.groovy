@@ -1,6 +1,6 @@
 
 
-def call(String name, String name2){ 
+def call(String name){ 
 
         echo "${name} ${name2}"
 
