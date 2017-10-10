@@ -7,9 +7,7 @@ def call(Map DeployConfig){
                         awsEcrImg = "${DeployConfig.awsAppEnv}"
 
                         sh script: """
-                            #!/bin/bash
-                            aws ecs list-clusters 
-                            #| jq -r '.clusterArns[]|select(test("^.*CL.*-${awsEnv}\$"))'
+                                aws ecs list-clusters
                             """, returnStdout: true
                 }
         }
