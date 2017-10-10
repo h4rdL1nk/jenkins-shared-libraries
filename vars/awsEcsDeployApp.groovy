@@ -6,7 +6,7 @@ def call(Map DeployConfig){
                         awsAppName = "${DeployConfig.awsAppName}"
                         awsEcrImg = "${DeployConfig.awsEcrImg}"
 
-                        sh script: '''
+                        sh script: """
                                 clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))')
 
                                 svcArn=\$(aws ecs list-services --cluster \${clArn} \
@@ -45,14 +45,14 @@ def call(Map DeployConfig){
                                     --task-definition \${svcNewTaskDefArn} \
                                     | jq -r '.service.deployments[]|select(.status=="PRIMARY")|.taskDefinition')
 
-                                if [ "\${svcUpdateResult}" == "\${svcNewTaskDefArn}" ]
+                                if [ \"\${svcUpdateResult}\" == \"\${svcNewTaskDefArn}\" ]
                                 then
                                     echo "AWS/ECS service updated with task-definition: \${svcUpdateResult}"
                                 else
                                     echo "AWS/ECS error updating service!!"
                                     exit 1
                                 fi
-                            '''
+                            """
                 }
         }
 } 
