@@ -28,16 +28,11 @@ def call(Map DeployConfig){
                                                     else .placementConstraints=[] 
                                                     end|
                                             .containerDefinitions[].image="'${awsEcrImg}'"|
-                                            if .taskRoleArn 
-                                                    then .taskRoleArn=.taskRoleArn 
-                                                    else .taskRoleArn=null 
-                                                    end|
                                             {
                                                 networkMode:.networkMode,
                                                 family:.family,
                                                 volumes:.volumes,
                                                 containerDefinitions:.containerDefinitions,
-                                                taskRoleArn:.taskRoleArn,
                                                 placementConstraints:.placementConstraints
                                             }')
 
