@@ -8,8 +8,10 @@ def call(Map DeployConfig){
 
                         sh script: """
                                 clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))')
-                                svcArn=\$(aws ecs list-services --cluster \${clArn} | jq -r '.serviceArns[]|select(test("^.*SVC-'${awsAppName}'"))')
-                                svcTaskDefArn=\$(aws ecs describe-services  --cluster \${clArn} --services \${svcArn} | jq -r '.services[].taskDefinition')
+                                svcArn=\$(aws ecs list-services --cluster \${clArn} \
+                                          | jq -r '.serviceArns[]|select(test("^.*SVC-'${awsAppName}'"))')
+                                svcTaskDefArn=\$(aws ecs describe-services  --cluster \${clArn} --services \${svcArn} \
+                                          | jq -r '.services[].taskDefinition')
                                 echo \${svcTaskDefArn}
                             """
                 }
