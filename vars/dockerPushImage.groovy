@@ -2,9 +2,14 @@
 
 def call(Map PushConfig){ 
 
-        echo "${PushConfig.imageName}"
-        echo "${PushConfig.registryUrl}"
-        echo "${PushConfig.pushImageTag}"
+        withDockerRegistry(url:"${PushConfig.registryUrl}",credentialsId:"${PushConfig.registryCredId}"){
+        script{
+                sh script: """
+                        docker tag ${PushConfig.localImageTag} ${PushConfig.pushImageTag}
+                        docker push ${PushConfig.pushImageTag}
+                """, returnStdout: true
+                }
+        }
 
 }
 
