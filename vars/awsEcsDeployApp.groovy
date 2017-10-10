@@ -39,10 +39,19 @@ def call(Map DeployConfig){
                                 svcNewTaskDefArn=\$(aws ecs register-task-definition --cli-input-json "\${modSvcTaskDefJson}" \
                                     | jq -r '.taskDefinition.taskDefinitionArn')
 
-                                aws ecs update-service \
+                                svcUpdateResult=\$(aws ecs update-service \
                                     --cluster \${clArn} \
                                     --service \${svcArn} \
-                                    --task-definition \${svcNewTaskDefArn}
+                                    --task-definition \${svcNewTaskDefArn} \
+                                    | jq -r '.service.deployments[]|select(.status=="PRIMARY")|.taskDefinition')
+
+                                if [ "\${svcUpdateResult}" == "\$svcNewTaskDefArn}" ]
+                                then
+                                    echo "AWS/ECS service updated with task-definition: \${svcUpdateResult}"
+                                else
+                                    echo "AWS/ECS error updating service!!"
+                                    exit 1
+                                fi
                             """
                 }
         }
