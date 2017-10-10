@@ -8,7 +8,8 @@ def call(Map DeployConfig){
 
                         sh script: """
                             #!/bin/bash
-                            aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-${awsEnv}\$"))'
+                            aws ecs list-clusters 
+                            #| jq -r '.clusterArns[]|select(test("^.*CL.*-${awsEnv}\$"))'
                             """, returnStdout: true
                 }
         }
