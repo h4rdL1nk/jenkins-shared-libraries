@@ -1,12 +1,6 @@
 
 
 def call(registryUrl){ 
-
-    def config = [:]
-    body.resolveStrategy = Closure.DELEGATE_FIRST
-    body.delegate = config
-    body()
-
         withDockerRegistry(url:${registryUrl},credentialsId:"local-docker-registry"){
 				script{
 						imgTag = codeCo.GIT_COMMIT
