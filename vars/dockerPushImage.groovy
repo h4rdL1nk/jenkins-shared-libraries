@@ -2,7 +2,7 @@
 
 def call(String name){ 
 
-        echo "${name} ${name2}"
+        echo "${name}"
 
 }
 
