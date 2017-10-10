@@ -1,12 +1,11 @@
 
 
-def call(registryUrl){ 
+def call(registryUrl,imageOrigName,imagePushName){ 
         withDockerRegistry(url:"${registryUrl}",credentialsId:"local-docker-registry"){
 				script{
-						imgTag = codeCo.GIT_COMMIT
-						imgLocalTag = "registry.madisonmk.com/${DEPARTMENT}/${APP_NAME}:${imgTag}"
+						imgLocalTag = "registry.madisonmk.com/${imageName}"
 						sh script: """
-                            docker tag jenkins-${JOB_NAME}-${BUILD_NUMBER}-img ${imgLocalTag}
+                            docker tag ${imageOrigName} ${imgLocalTag}
                             docker push ${imgLocalTag}
                             """, returnStdout: true
 				}
