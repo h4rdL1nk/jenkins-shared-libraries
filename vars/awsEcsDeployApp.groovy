@@ -10,6 +10,7 @@ def call(Map DeployConfig){
                                 echo ENV: ${awsEnv}
                                 echo APP: ${awsAppName}
                                 echo IMG: ${awsEcrImg}
+                                aws ec2 describe-instances
                             """
                         sh script: """
                                 aws ecs list-clusters
