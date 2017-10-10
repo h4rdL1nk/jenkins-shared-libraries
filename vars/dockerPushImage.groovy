@@ -1,8 +1,8 @@
 
 
-def call(String name){ 
+def call(Map vars){ 
 
-        echo "${name}"
+        echo "${vars.name}"
 
 }
 
