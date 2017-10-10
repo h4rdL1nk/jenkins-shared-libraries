@@ -6,7 +6,7 @@ def call(Map DeployConfig){
                         awsAppName = "${DeployConfig.awsAppName}"
                         awsEcrImg = "${DeployConfig.awsEcrImg}"
 
-                        sh script: """
+                        sh script: '''
                                 clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))')
 
                                 svcArn=\$(aws ecs list-services --cluster \${clArn} \
@@ -52,7 +52,7 @@ def call(Map DeployConfig){
                                     echo "AWS/ECS error updating service!!"
                                     exit 1
                                 fi
-                            """
+                            '''
                 }
         }
 } 
