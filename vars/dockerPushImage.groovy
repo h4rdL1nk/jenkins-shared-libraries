@@ -1,15 +1,8 @@
 
 
-def call(body){ 
+def call(String name){ 
 
-    def config = [:]
-    body.resolveStrategy = Closure.DELEGATE_FIRST
-    body.delegate = config
-
-    body()
-
-    echo ${config.dockerImage}
-    echo ${config.dockerRegistry}
+        echo "${name}"
 
 }
 
