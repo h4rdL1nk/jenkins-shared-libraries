@@ -6,7 +6,7 @@ def call(Map PushConfig){
         script{ 
                 def registryEndpoint = PushConfig.registryUrl.split('//')[1].trim()
                 sh script: """
-                        docker tag ${PushConfig.localImageTag} ${registryEndpoint}/${PushConfig.pushImageTag}
+                        docker tag ${PushConfig.localImageTag} ${PushConfig.pushImageTag}
                         docker push ${registryEndpoint}/${PushConfig.pushImageTag}
                     """, returnStdout: true
                 }
