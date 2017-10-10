@@ -45,13 +45,9 @@ def call(Map DeployConfig){
                                     --task-definition \${svcNewTaskDefArn} \
                                     | jq -r '.service.deployments[]|select(.status=="PRIMARY")|.taskDefinition')
 
-                                if [ \"\${svcUpdateResult}\" == \"\${svcNewTaskDefArn}\" ]
-                                then
-                                    echo "AWS/ECS service updated with task-definition: \${svcUpdateResult}"
-                                else
-                                    echo "AWS/ECS error updating service!!"
-                                    exit 1
-                                fi
+                                
+                                echo "AWS/ECS service updated with task-definition: \${svcUpdateResult}"
+                                
                             """
                 }
         }
