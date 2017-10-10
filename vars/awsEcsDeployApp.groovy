@@ -30,7 +30,7 @@ def call(Map DeployConfig){
                                             .containerDefinitions[].image="'${awsEcrImg}'"|
                                             if .taskRoleArn 
                                                     then .taskRoleArn=.taskRoleArn 
-                                                    lse .taskRoleArn=null 
+                                                    else .taskRoleArn=null 
                                                     end|
                                             {
                                                 networkMode:.networkMode,
