@@ -41,7 +41,7 @@ def call(Map DeployConfig){
                                                 placementConstraints:.placementConstraints
                                             }')
 
-                                echo \${modSvcTaskDefJson} | jq -r ''
+                                aws ecs register-task-definition --cli-input-json "\${modSvcTaskDefJson}"
                             """
                 }
         }
