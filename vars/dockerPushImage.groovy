@@ -1,8 +1,9 @@
 
 
-def call(Map vars){ 
+def call(Map PushConfig){ 
 
-        echo "${vars.name}"
+        echo "${PushConfig.registryUrl}"
+        echo "${PushConfig.imageName}"
 
 }
 
