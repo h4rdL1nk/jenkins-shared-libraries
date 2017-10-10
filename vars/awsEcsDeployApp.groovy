@@ -36,7 +36,13 @@ def call(Map DeployConfig){
                                                 placementConstraints:.placementConstraints
                                             }')
 
-                                aws ecs register-task-definition --cli-input-json "\${modSvcTaskDefJson}"
+                                svcNewTaskDefArn=\$(aws ecs register-task-definition --cli-input-json "\${modSvcTaskDefJson}" \
+                                    | jq -r '.taskDefinition.taskDefinitionArn')
+
+                                aws ecs update-service \
+                                    --cluster \${clArn} \
+                                    --service \${svcArn} \
+                                    --task-definition \${svcNewTaskDefArn}
                             """
                 }
         }
