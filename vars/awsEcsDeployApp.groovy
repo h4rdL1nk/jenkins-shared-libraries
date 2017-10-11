@@ -66,7 +66,15 @@ def call(Map DeployConfig){
                                     --task-definition \${svcNewTaskDefArn} \
                                     | jq -r '.service.deployments[]|select(.status=="PRIMARY")|.taskDefinition' 2>/dev/null)
 
-                                [ \$? -ne 0 ] && echo error actualizando ECS/Service && exit 2
+                                if [ \$? -ne 0 ]
+                                then
+                                    echo error actualizando ECS/Service
+                                    exit 2
+                                else
+                                    echo Updated ECS/Service: \${svcUpdateResult}
+                                    exit 0
+                                fi
+                                
                             """
                 }
         }
