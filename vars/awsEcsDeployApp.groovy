@@ -16,7 +16,7 @@ def call(Map DeployConfig){
                                 svcArn=\$(aws ecs list-services --cluster \${clArn} \
                                           | jq -r '.serviceArns[]|select(test("^.*SVC-'${awsAppName}'"))')
 
-                                [ -z $svcArn ] && echo ECS/Service no encontrado && exit 2
+                                [ -z \${svcArn} ] && echo ECS/Service no encontrado && exit 2
 
                                 svcTaskDefArn=\$(aws ecs describe-services  --cluster \${clArn} --services \${svcArn} \
                                           | jq -r '.services[].taskDefinition')
