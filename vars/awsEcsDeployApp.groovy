@@ -40,6 +40,10 @@ def call(Map DeployConfig){
                                                     then .placementConstraints=.placementConstraints 
                                                     else .placementConstraints=[] 
                                                     end|
+                                            if .networkMode
+                                                    then .networkMode=.networkMode
+                                                    else .networkMode="bridge"
+                                                    end|
                                             .containerDefinitions[].image="'${awsEcrImg}'"|
                                             {
                                                 networkMode:.networkMode,
