@@ -13,8 +13,8 @@ def call(Map PushConfig){
                             ${docker_login_cmd}
                             docker tag ${PushConfig.localImageTag} ${imgAwsTag}
                             docker push ${imgAwsTag}
-                            """, returnStdout: true
-                    
+                            """, returnStdout: false
+
                         echo "${imgAwsTag}"
                     }
         }
