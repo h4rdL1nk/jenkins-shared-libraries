@@ -11,7 +11,7 @@ def call(Map DeployConfig){
 
                                 clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))' 2>/dev/null)
 
-                                [ -z $clArn ] && echo ECS/Cluster no encontrado && exit 1
+                                [ -z \${clArn} ] && echo ECS/Cluster no encontrado && exit 1
 
                                 svcArn=\$(aws ecs list-services --cluster \${clArn} \
                                           | jq -r '.serviceArns[]|select(test("^.*SVC-'${awsAppName}'"))')
