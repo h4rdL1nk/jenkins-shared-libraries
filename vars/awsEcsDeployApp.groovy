@@ -7,10 +7,16 @@ def call(Map DeployConfig){
                         awsEcrImg = "${DeployConfig.awsEcrImg}"
 
                         sh script: """
-                                clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))')
+                                #!/bin/bash
+
+                                clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*CL.*-'${awsEnv}'\$"))' 2>/dev/null)
+
+                                [ -z $clArn ] && echo ECS/Cluster no encontrado && exit 1
 
                                 svcArn=\$(aws ecs list-services --cluster \${clArn} \
                                           | jq -r '.serviceArns[]|select(test("^.*SVC-'${awsAppName}'"))')
+
+                                [ -z $svcArn ] && echo ECS/Service no encontrado && exit 2
 
                                 svcTaskDefArn=\$(aws ecs describe-services  --cluster \${clArn} --services \${svcArn} \
                                           | jq -r '.services[].taskDefinition')
