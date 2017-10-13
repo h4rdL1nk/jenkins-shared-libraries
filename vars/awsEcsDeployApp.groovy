@@ -69,7 +69,7 @@ def call(Map DeployConfig){
 
                                 if [ \$? -ne 0 ]
                                 then
-                                    echo error actualizando ECS/Service
+                                    echo Error actualizando ECS/Service
                                     exit 2
                                 else
                                     echo Updated ECS/Service: \${svcUpdateResult}
