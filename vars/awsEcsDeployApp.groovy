@@ -10,13 +10,13 @@ def call(Map DeployConfig){
                         sh script: """
                                 #!/bin/bash
 
-                                clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^CL.*-'${awsEnv}'\$"))' 2>/dev/null)
+                                clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("^.*/CL.*-'${awsEnv}'\$"))' 2>/dev/null)
 
                                 [ \$? -ne 0 ] && echo error recuperando ECS/Cluster && exit 2
                                 [ -z \${clArn} ] && echo ECS/Cluster no encontrado && exit 1
 
                                 svcArn=\$(aws ecs list-services --cluster \${clArn} \
-                                          | jq -r '.serviceArns[]|select(test("^SVC-'${awsAppName}'"))' 2>/dev/null)
+                                          | jq -r '.serviceArns[]|select(test("^.*/SVC-'${awsAppName}'"))' 2>/dev/null)
 
                                 [ \$? -ne 0 ] && echo error recuperando ECS/Service && exit 2
                                 [ -z \${svcArn} ] && echo ECS/Service no encontrado && exit 1
