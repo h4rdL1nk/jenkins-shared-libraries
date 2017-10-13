@@ -73,7 +73,6 @@ def call(Map DeployConfig){
                                     exit 2
                                 else
                                     echo Updated ECS/Service: \${svcUpdateResult}
-                                    exit 0
                                 fi
 
                                 while :
