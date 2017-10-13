@@ -91,7 +91,7 @@ def call(Map DeployConfig){
 
                                       if [ \$i -ge \${deployTimeout} ]
                                       then
-                                            echo Deployment timeout!!
+                                            echo Deployment timeout[\${deployTimeout}]!!
                                             exit 1
                                       fi
 
