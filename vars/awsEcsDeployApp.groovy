@@ -5,6 +5,7 @@ def call(Map DeployConfig){
                         awsEnv = "${DeployConfig.awsAppEnv}"
                         awsAppName = "${DeployConfig.awsAppName}"
                         awsEcrImg = "${DeployConfig.awsEcrImg}"
+                        deployTimeout = "${DeployConfig.deployTimeout}"
 
                         sh script: """
                                 #!/bin/bash
@@ -74,6 +75,30 @@ def call(Map DeployConfig){
                                     echo Updated ECS/Service: \${svcUpdateResult}
                                     exit 0
                                 fi
+
+                                while :
+                                do
+                                      RUNNING=\$(aws ecs list-tasks --cluster \${clArn}  --service-name \${svcArn} --desired-status RUNNING \
+                                        | jq -r '.taskArns[]' \
+                                        | xargs -I{} aws ecs describe-tasks --cluster $clArn --tasks {} \
+                                        | jq -r '.tasks[]| if .taskDefinitionArn == "'\${svcNewTaskDefArn}'" then . else empty end|.lastStatus' \
+                                        | grep -e RUNNING || : )
+
+                                      if `echo $RUNNING | grep RUNNING 1>/dev/null 2>/dev/null`
+                                      then
+                                            echo Service deployed
+                                            exit 0
+                                      fi
+
+                                      if [ $i -ge \${deployTimeout} ]
+                                      then
+                                            echo Deployment timeout!!
+                                            exit 1
+                                      fi
+
+                                      sleep 10
+                                      i=\$(( $i + 10 ))
+                                done
                                 
                             """
                 }
