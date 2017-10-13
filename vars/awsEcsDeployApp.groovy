@@ -84,7 +84,7 @@ def call(Map DeployConfig){
                                         | jq -r '.tasks[]| if .taskDefinitionArn == "'\${svcNewTaskDefArn}'" then . else empty end|.lastStatus' \
                                         | grep -e RUNNING || : )
 
-                                      if `echo $RUNNING | grep RUNNING 1>/dev/null 2>/dev/null`
+                                      if `echo \$RUNNING | grep RUNNING 1>/dev/null 2>/dev/null`
                                       then
                                             echo Service deployed
                                             exit 0
