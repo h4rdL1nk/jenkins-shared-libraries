@@ -80,7 +80,7 @@ def call(Map DeployConfig){
                                 do
                                       RUNNING=\$(aws ecs list-tasks --cluster \${clArn}  --service-name \${svcArn} --desired-status RUNNING \
                                         | jq -r '.taskArns[]' \
-                                        | xargs -I{} aws ecs describe-tasks --cluster $clArn --tasks {} \
+                                        | xargs -I{} aws ecs describe-tasks --cluster \${clArn} --tasks {} \
                                         | jq -r '.tasks[]| if .taskDefinitionArn == "'\${svcNewTaskDefArn}'" then . else empty end|.lastStatus' \
                                         | grep -e RUNNING || : )
 
@@ -90,14 +90,14 @@ def call(Map DeployConfig){
                                             exit 0
                                       fi
 
-                                      if [ $i -ge \${deployTimeout} ]
+                                      if [ \$i -ge \${deployTimeout} ]
                                       then
                                             echo Deployment timeout!!
                                             exit 1
                                       fi
 
                                       sleep 10
-                                      i=\$(( $i + 10 ))
+                                      i=\$(( \$i + 10 ))
                                 done
                                 
                             """
