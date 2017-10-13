@@ -75,6 +75,8 @@ def call(Map DeployConfig){
                                     echo Updated ECS/Service: \${svcUpdateResult}
                                 fi
 
+                                i=0
+
                                 while :
                                 do
                                       RUNNING=\$(aws ecs list-tasks --cluster \${clArn}  --service-name \${svcArn} --desired-status RUNNING \
