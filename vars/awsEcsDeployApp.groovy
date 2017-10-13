@@ -10,9 +10,6 @@ def call(Map DeployConfig){
                         ecsClusterRegex="^.*/CL.*-${awsEnv}\$"
                         ecsServiceRegex="^.*/SVC-${awsAppName}"
 
-                        echo ecsClusterRegex
-                        echo ecsServiceRegex
-
                         sh script: """
                                 #!/bin/bash
 
