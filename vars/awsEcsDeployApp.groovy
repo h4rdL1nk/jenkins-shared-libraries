@@ -7,8 +7,10 @@ def call(Map DeployConfig){
                         awsEcrImg = "${DeployConfig.awsEcrImg}"
                         deployTimeout = "${DeployConfig.deployTimeout}"
 
-                        ecsClusterRegex="^.*/CL.*-${awsEnv}\$"
-                        ecsServiceRegex="^.*/SVC-${awsAppName}"
+                        //ecsClusterRegex="^.*/CL.*-${awsEnv}\$"
+                        //ecsServiceRegex="^.*/SVC-${awsAppName}"
+                        ecsClusterRegex="${DeployConfig.ecsClusterRegex}"
+                        ecsServiceRegex="${DeployConfig.ecsServiceRegex}"
 
                         sh script: """
                                 #!/bin/bash
