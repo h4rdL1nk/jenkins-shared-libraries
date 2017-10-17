@@ -2,13 +2,9 @@
 def call(Map DeployConfig){
         withAWS(region:"${DeployConfig.awsRegion}",credentials:"${DeployConfig.awsCredId}"){
                 script{
-                        awsEnv = "${DeployConfig.awsAppEnv}"
-                        awsAppName = "${DeployConfig.awsAppName}"
                         awsEcrImg = "${DeployConfig.awsEcrImg}"
                         deployTimeout = "${DeployConfig.deployTimeout}"
 
-                        //ecsClusterRegex="^.*/CL.*-${awsEnv}\$"
-                        //ecsServiceRegex="^.*/SVC-${awsAppName}"
                         ecsClusterRegex="${DeployConfig.ecsClusterRegex}"
                         ecsServiceRegex="${DeployConfig.ecsServiceRegex}"
 
@@ -38,26 +34,9 @@ def call(Map DeployConfig){
 
                                 modSvcTaskDefJson=\$(echo \${svcTaskDefJson} \
                                     | jq -r '.taskDefinition|
-                                            if .volumes 
-                                                    then .volumes=.volumes 
-                                                    else .volumes=[] 
-                                                    end|
-                                            if .placementConstraints != null 
-                                                    then .placementConstraints=.placementConstraints 
-                                                    else .placementConstraints=[] 
-                                                    end|
-                                            if .networkMode
-                                                    then .networkMode=.networkMode
-                                                    else .networkMode="bridge"
-                                                    end|
                                             .containerDefinitions[].image="'${awsEcrImg}'"|
-                                            {
-                                                networkMode:.networkMode,
-                                                family:.family,
-                                                volumes:.volumes,
-                                                containerDefinitions:.containerDefinitions,
-                                                placementConstraints:.placementConstraints
-                                            }')
+                                            del(.revision,.status,.taskDefinitionArn,.requiresAttributes)
+                                            ')
 
                                 [ \$? -ne 0 ] && echo error construyendo ECS/TaskDefinition && exit 2
 
