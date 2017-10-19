@@ -9,17 +9,36 @@ def call(Map gitConfig){
         case 'longHash':
             data = sh(
                 returnStdout: true, 
-                script: "git log -n 1 --pretty=format:'%H'"
+                script: """
+                            #!/bin/bash
+                            set +x
+                            git log -n 1 --pretty=format:'%H'
+                        """
             ).trim()
             break
 
         case 'shortHash':
             data = sh(
                 returnStdout: true, 
-                script: "git log -n 1 --pretty=format:'%h'"
+                script: """
+                            #!/bin/bash
+                            set +x
+                            git log -n 1 --pretty=format:'%h'
+                        """
             ).trim()
             break
 
+        case 'message':
+            data = sh(
+                returnStdout: true, 
+                script: """
+                            #!/bin/bash
+                            set +x
+                            git log -n 1 --pretty=format:'%s'
+                        """
+            ).trim()
+            break
+            
     }
 
     return data
