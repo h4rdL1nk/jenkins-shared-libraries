@@ -9,7 +9,9 @@ def call(Map DeployConfig){
                         ecsServiceRegex="${DeployConfig.ecsServiceRegex}"
 
                         sh script: """
-                                #!/bin/bash +x
+                                #!/bin/bash 
+
+                                set +x
 
                                 clArn=\$(aws ecs list-clusters | jq -r '.clusterArns[]|select(test("${ecsClusterRegex}"))' 2>/dev/null)
 

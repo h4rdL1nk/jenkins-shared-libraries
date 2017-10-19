@@ -13,7 +13,10 @@ def call(Map PushConfig){
                         imgAwsTag = "${docker_login_endpt.split('//')[1]}/${PushConfig.pushImageTag}"
 
                         sh script: """
-                            #!/bin/bash +x
+                            #!/bin/bash 
+
+                            set +x
+                            
                             ${docker_login_cmd}
                             docker tag ${PushConfig.localImageTag} ${imgAwsTag}
                             docker push ${imgAwsTag}
