@@ -6,6 +6,17 @@ def call(Map gitConfig){
 
     switch(gitConfig.param){
 
+        case 'currentBranch':
+            data = sh(
+                returnStdout: true, 
+                script: """
+                            #!/bin/bash
+                            set +x
+                            git rev-parse --git-dir='. --abbrev-ref HEAD
+                        """
+            ).trim()
+            break
+
         case 'longHash':
             data = sh(
                 returnStdout: true, 
@@ -38,7 +49,7 @@ def call(Map gitConfig){
                         """
             ).trim()
             break
-            
+
     }
 
     return data
