@@ -6,6 +6,17 @@ def call(Map gitConfig){
 
     switch(gitConfig.param){
 
+        case 'authorMail':
+            data = sh(
+                returnStdout: true, 
+                script: """
+                            #!/bin/bash
+                            set +x
+                            git log -n 1 --pretty=format:'%aE'
+                        """
+            ).trim()
+            break
+
         case 'currentBranch':
             data = sh(
                 returnStdout: true, 
