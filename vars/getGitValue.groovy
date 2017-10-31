@@ -50,6 +50,17 @@ def call(Map gitConfig){
             ).trim()
             break
 
+        case 'commitDate':
+            data = sh(
+                returnStdout: true, 
+                script: """
+                            #!/bin/bash
+                            set +x
+                            git log -n 1 --pretty=format:'%ci'
+                        """
+            ).trim()
+            break
+
         case 'message':
             data = sh(
                 returnStdout: true, 
