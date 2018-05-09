@@ -23,7 +23,7 @@ def call(Map gitConfig){
                 script: """
                             #!/bin/bash
                             set +x
-                            git rev-parse --git-dir='.' --abbrev-ref HEAD
+                            git rev-parse --abbrev-ref HEAD
                         """
             ).trim()
             break
