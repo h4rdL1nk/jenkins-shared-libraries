@@ -5,6 +5,16 @@ def call(Map notifyConfig){
     switch(notifyConfig.type){
 
         case 'slack-default-start':
+            commitMsg = getGitValue([
+                param: "message"
+            ])
+            commitHash = getGitValue([
+                param: "shortHash"
+            ])
+            commitDate = getGitValue([
+                param: "commitDate"
+            ])
+            
             slackSend channel: '#ci-jobs', 
                 color: '#6CBDEC', 
                 message: "Starting build job ${JOB_NAME} #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n[${commitDate}] `${commitHash}` message:\n ```${commitMsg}```"
