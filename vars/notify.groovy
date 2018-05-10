@@ -4,7 +4,14 @@ def call(Map notifyConfig){
 
     switch(notifyConfig.type){
 
-        case 'slack-default':
+        case 'slack-default-start':
+            slackSend channel: '#ci-jobs', 
+                color: '#6CBDEC', 
+                message: "Starting build job ${JOB_NAME} #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n[${commitDate}] `${commitHash}` message:\n ```${commitMsg}```"
+        
+            break
+
+        case 'slack-default-end':
             def buildResult = currentBuild.getCurrentResult()
             def slackColor = ""
 
