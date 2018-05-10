@@ -5,6 +5,11 @@ def call(Map notifyConfig){
     switch(notifyConfig.type){
 
         case 'slack-default-start':
+
+            def slackMessage = ""
+            def gitInfo = ""
+
+            //Get git commit properties
             commitMsg = getGitValue([
                 param: "message"
             ])
@@ -14,10 +19,17 @@ def call(Map notifyConfig){
             commitDate = getGitValue([
                 param: "commitDate"
             ])
+
+            //Set git information string for message
+            gitInfo = "${GIT_URL} (${GIT_BRANCH})\n[${commitDate}] `${commitHash}` message:\n ```${commitMsg}```"
+
+            //Compose slack message string
+            slackMessage = "Starting build job *${JOB_NAME}* #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n${gitInfo}" 
             
+            //Send slack notification
             slackSend channel: '#ci-jobs', 
                 color: '#6CBDEC', 
-                message: "Starting build job ${JOB_NAME} #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n[${commitDate}] `${commitHash}` message:\n ```${commitMsg}```"
+                message: "${slackMessage}"
         
             break
 
@@ -25,6 +37,7 @@ def call(Map notifyConfig){
             def buildResult = currentBuild.getCurrentResult()
             def slackColor = ""
 
+            //Set colors by build result
             switch (buildResult){
                     case "FAILURE":
                         slackColor = "#F71302";
@@ -36,9 +49,10 @@ def call(Map notifyConfig){
                         slackColor = "#6CBDEC";
             }
 
+            //Send slack notification
             slackSend channel: "#ci-jobs", 
                       color: "${slackColor}", 
-                      message: "Built job ${JOB_NAME} #${BUILD_NUMBER} with result *${buildResult}*"
+                      message: "Built job *${JOB_NAME}* #${BUILD_NUMBER} with result *${buildResult}*"
             
             break
 
