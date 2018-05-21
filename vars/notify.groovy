@@ -7,7 +7,15 @@ def call(Map notifyConfig){
         case 'slack-default-start':
 
             def slackMessage = ""
+            def slackChannel = ""
             def gitInfo = ""
+
+            if(notifyConfig.channel){
+                slackChannel = "${notifyConfig.channel}"
+            }
+            else{
+                slackChannel = "#ci-jobs"
+            }
 
             //Get git commit properties
             commitMsg = getGitValue([
@@ -21,21 +29,32 @@ def call(Map notifyConfig){
             ])
 
             //Set git information string for message
-            gitInfo = "${GIT_URL} (${GIT_BRANCH})\n[${commitDate}] `${commitHash}` message:\n ```${commitMsg}```"
-
+            if(env.GIT_COMMIT) {
+                gitInfo = "${GIT_URL} (${GIT_BRANCH})\n[${commitDate}] `${commitHash}` message:\n ```${commitMsg}```"
+            }
+            
             //Compose slack message string
             slackMessage = "Starting build job *${JOB_NAME}* #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n${gitInfo}" 
             
             //Send slack notification
-            slackSend channel: '#ci-jobs', 
+            slackSend channel: "${slackChannel}", 
                 color: '#6CBDEC', 
                 message: "${slackMessage}"
         
             break
 
         case 'slack-default-end':
+
             def buildResult = currentBuild.getCurrentResult()
             def slackColor = ""
+            def slackChannel = ""
+
+            if(notifyConfig.channel){
+                slackChannel = "${notifyConfig.channel}"
+            }
+            else{
+                slackChannel = "#ci-jobs"
+            }
 
             //Set colors by build result
             switch (buildResult){
@@ -50,7 +69,7 @@ def call(Map notifyConfig){
             }
 
             //Send slack notification
-            slackSend channel: "#ci-jobs", 
+            slackSend channel: "${slackChannel}", 
                       color: "${slackColor}", 
                       message: "Built job *${JOB_NAME}* #${BUILD_NUMBER} with result *${buildResult}*"
             
