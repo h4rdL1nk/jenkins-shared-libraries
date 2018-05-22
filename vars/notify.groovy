@@ -17,6 +17,7 @@ def call(Map notifyConfig){
                 slackChannel = "#ci-jobs"
             }
 
+
             //Get git commit properties
             commitMsg = getGitValue([
                 param: "message"
@@ -34,7 +35,12 @@ def call(Map notifyConfig){
             }
             
             //Compose slack message string
-            slackMessage = "Starting build job *${JOB_NAME}* #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n${gitInfo}" 
+            if(notifyConfig.message){
+                slackMessage = "Starting build job *${JOB_NAME}* #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n${gitInfo}\n*INFO*: ${notifyConfig.message}"
+            }
+            else{
+                slackMessage = "Starting build job *${JOB_NAME}* #${BUILD_NUMBER} (<${BUILD_URL}|Open>)\n${gitInfo}"
+            } 
             
             //Send slack notification
             slackSend channel: "${slackChannel}", 
@@ -48,12 +54,20 @@ def call(Map notifyConfig){
             def buildResult = currentBuild.getCurrentResult()
             def slackColor = ""
             def slackChannel = ""
+            def slackMessage = ""
 
             if(notifyConfig.channel){
                 slackChannel = "${notifyConfig.channel}"
             }
             else{
                 slackChannel = "#ci-jobs"
+            }
+
+            if(notifyConfig.message){
+                slackMessage = "Built job *${JOB_NAME}* #${BUILD_NUMBER} with result *${buildResult}*\n*INFO*: ${notifyConfig.message}"
+            }
+            else{
+                slackMessage = "Built job *${JOB_NAME}* #${BUILD_NUMBER} with result *${buildResult}*"
             }
 
             //Set colors by build result
@@ -71,7 +85,7 @@ def call(Map notifyConfig){
             //Send slack notification
             slackSend channel: "${slackChannel}", 
                       color: "${slackColor}", 
-                      message: "Built job *${JOB_NAME}* #${BUILD_NUMBER} with result *${buildResult}*"
+                      message: "${slackMessage}"
             
             break
 
