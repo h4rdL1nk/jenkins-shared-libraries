@@ -6,6 +6,17 @@ def call(Map gitConfig){
 
     switch(gitConfig.param){
 
+	case 'tagListHttpRepo':
+            withCredentials([usernamePassword(credentialsId: "${gitConfig.credentialsId}", passwordVariable: 'GIT_PASS', usernameVariable: 'GIT_USER')]) {
+                data = sh(
+                    returnStdout: true,
+                    script: """
+                        git ls-remote --tags ${gitConfig.httpProto}://${GIT_USER}:${GIT_PASS}@${gitConfig.httpRepo} | awk '{split(\$2,a,"/");printf("%s\\n",a[3]);}'
+                    """
+                ).trim()
+            }
+            break
+
         case 'authorMail':
             data = sh(
                 returnStdout: true, 
